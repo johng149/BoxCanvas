@@ -1,0 +1,1 @@
+contains typedefs that functions that components expect should have
