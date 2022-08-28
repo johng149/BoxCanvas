@@ -1,4 +1,3 @@
-import 'package:box_canvas/box_canvas.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -36,7 +35,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text("Test AppBar")),
-        body: TestComponent());
+        appBar: AppBar(title: const Text("Test AppBar")), body: Placeholder());
   }
 }
