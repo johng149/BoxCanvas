@@ -5,6 +5,7 @@ import 'package:box_canvas/src/abstract_providers/global_offset_provider_interfa
 import 'package:box_canvas/src/models/xy_tuple/xy_tuple.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:uuid/uuid.dart';
 
 class BoxCanvas extends ConsumerWidget {
   ///When user pans canvas instead of an individual widget, offset stored here
@@ -29,6 +30,9 @@ class BoxCanvas extends ConsumerWidget {
 
   ///Options to be shown when user clicks button to add widget to canvas
   final List<AddEntityOption> options;
+
+  ///Used when creating widgets to given them unique identifier
+  final _uid = const Uuid();
 
   const BoxCanvas(
       {Key? key,
