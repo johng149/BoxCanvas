@@ -10,6 +10,8 @@ import 'package:flutter/cupertino.dart';
 abstract class IEntityPositionNotifier extends ChangeNotifier {
   Map<String, EntityPosition> get allData;
 
+  Iterable<String> get ids;
+
   ///Attempt to read position referred to by [id]
   EntityPosition? accessOpt(String id);
 

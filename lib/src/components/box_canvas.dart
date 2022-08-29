@@ -2,6 +2,8 @@ import 'package:box_canvas/src/abstract_providers/add_entity_option.dart';
 import 'package:box_canvas/src/abstract_providers/entity_body_provider_interface.dart';
 import 'package:box_canvas/src/abstract_providers/entity_position_provider_interface.dart';
 import 'package:box_canvas/src/abstract_providers/global_offset_provider_interface.dart';
+import 'package:box_canvas/src/components/canvas_draggable.dart';
+import 'package:box_canvas/src/models/entity_position/entity_position.dart';
 import 'package:box_canvas/src/models/xy_tuple/xy_tuple.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -44,7 +46,95 @@ class BoxCanvas extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO: implement build
-    throw UnimplementedError();
+    //we use a layout builder so we know what screen size we have to work with
+    //this is needed since positions and offsets in providers are relative to
+    //the screen size. To use these values, we must first convert them to
+    //absolute coordinates using the size of the screen
+    return LayoutBuilder(builder: (context, constraints) {
+      final entities =
+          _entities(context: context, ref: ref, constraints: constraints);
+      return Placeholder();
+    });
   }
+
+  // #region Code for what widgets should be on canvas and return list of them
+  ///Widgets that should be displayed on canvas
+  ///
+  ///While it does not use [context] directly, it will pass [context] to
+  ///the widgets since it may be that their behavior changes depending on it
+  ///
+  ///[ref] is used to read providers for data such as widget positions and
+  ///[constraints] is also used for widget positions by converting relative
+  ///positions to absolute positions, along wth determining whether a widget's
+  ///position puts it off screen (and thus shouldn't be shown)
+  List<Widget> _entities(
+      {required BuildContext context,
+      required WidgetRef ref,
+      required BoxConstraints constraints}) {
+    // #region _entities body
+    final entities = <Widget>[];
+    final positionsNotifier = ref.watch(entityPositions);
+    final bodiesNotifier = ref.watch(entityBodies);
+    final offset = ref.watch(globalOffset);
+    for (final id in positionsNotifier.ids) {
+      final pos = positionsNotifier.accessOpt(id);
+      final body = bodiesNotifier.accessOpt(id);
+      if (_entityVisible(pos: pos, body: body, offset: offset)) {
+        entities.add(CanvasDraggable(
+            id: id,
+            constraints: constraints,
+            globalOffset: globalOffset,
+            entityPositions: entityPositions,
+            entityBodies: entityBodies,
+
+            //we can use null checks here since if [_entitiesVisible] function
+            //returned true (and thus allowing us to run this code), it must
+            //be that body and pos are not null
+            body: body!,
+            position: pos!));
+      }
+    }
+    return entities;
+    // #endregion
+  }
+
+  ///Determines if given widget is visible on the screen
+  bool _entityVisible(
+      {required EntityPosition? pos,
+      required Widget? body,
+      required XYTuple offset}) {
+    // #region _entityVisible body
+
+    //if position or body not exist, then widget is not visible
+    if (pos == null || body == null) {
+      return false;
+    } else {
+      //an entity's width is considered in screen if its right most edge position
+      //(calculated using [pos.position.x + pos.size.x]) is at least
+      //at the left most edge of the screen (calculated using
+      //[-offset.x])
+      //AND
+      //the entity's left most edge position (calculated using [pos.position.x])
+      //is at least at the right most edge of the screen. This is calculated by
+      //checking if the position of the left most edge plus the horizontal offset
+      //is less than 1. If it is greater than 1, then this means that the
+      //left most edge is off the screen to the right
+      final entityWidthInScreen = pos.position.x + pos.size.x >= -offset.x &&
+          pos.position.x + offset.x <= 1;
+      //an entity's height is considered in the screen if its top most edge
+      //(calculated using [pos.position.y]) is at least above the bottom edge
+      //of the screen. This is calculated by checking if the position of the
+      //top plus the vertical offset is less than 1. If it is greater than 1,
+      //then this means that the top most edge is below the bottom of the screen
+      //AND
+      //the entity's bottom edge (calculated using [pos.position.y + pos.size.y])
+      //is at least below the top edge of the screen (calculated using
+      //[-offset.y])
+      final entityHeightInScreen = pos.position.y + offset.y <= 1 &&
+          pos.position.y + pos.size.y >= -offset.y;
+      return entityWidthInScreen && entityHeightInScreen;
+    }
+    // #endregion
+  }
+  // #endregion
 }
