@@ -53,11 +53,23 @@ class BoxCanvas extends ConsumerWidget {
     return LayoutBuilder(builder: (context, constraints) {
       final entities =
           _entities(context: context, ref: ref, constraints: constraints);
-      return Placeholder();
+
+      //we then use a [Stack] so entities are placed in correct location/depth
+      //we also use this to place widgets to detect global pan and add button
+      return Stack(
+        children: [
+          globalPanDetector(
+              context: context,
+              ref: ref,
+              constraints: constraints,
+              globalOffset: globalOffset),
+          ...entities
+        ],
+      );
     });
   }
 
-  // #region Code for what widgets should be on canvas and return list of them
+  // #region for what widgets should be on canvas and return list of them
   ///Widgets that should be displayed on canvas
   ///
   ///While it does not use [context] directly, it will pass [context] to
@@ -137,4 +149,42 @@ class BoxCanvas extends ConsumerWidget {
     // #endregion
   }
   // #endregion
+
+  ///Creates [GestureDetector] that updates [globalOffset] upon dragging
+  Widget globalPanDetector(
+      {required BuildContext context,
+      required WidgetRef ref,
+      required BoxConstraints constraints,
+      required StateNotifierProvider<IGlobalOffsetNotifier, XYTuple>
+          globalOffset}) {
+    return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onPanUpdate: (details) {
+          globalPanUpdate(
+              details: details,
+              ref: ref,
+              constraints: constraints,
+              globalOffset: globalOffset);
+        });
+  }
+
+  ///Turns drag details to relative [XYTuple] then adds it to global offset
+  ///
+  ///Uses [details] along with [constraints] to create a relative [XYTuple],
+  ///then uses [ref] to read data from [globalOffset] and adds the created
+  ///[XYTuple] to data and writes it back to [globalOffset] using [ref]
+  void globalPanUpdate(
+      {required DragUpdateDetails details,
+      required WidgetRef ref,
+      required BoxConstraints constraints,
+      required StateNotifierProvider<IGlobalOffsetNotifier, XYTuple>
+          globalOffset}) {
+    final dx = details.delta.dx;
+    final dy = details.delta.dy;
+    final delta =
+        XYTuple(x: dx, y: dy, relative: false).toRelative(constraints);
+    final currentOffset = ref.read(globalOffset);
+    final newOffset = currentOffset.add(other: delta);
+    ref.read(globalOffset.notifier).setOffset(newOffset);
+  }
 }
