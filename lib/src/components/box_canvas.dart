@@ -7,6 +7,7 @@ import 'package:box_canvas/src/models/entity_position/entity_position.dart';
 import 'package:box_canvas/src/models/xy_tuple/xy_tuple.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:uuid/uuid.dart';
 
 class BoxCanvas extends ConsumerWidget {
@@ -150,6 +151,7 @@ class BoxCanvas extends ConsumerWidget {
   }
   // #endregion
 
+  // #region for global pan detector
   ///Creates [GestureDetector] that updates [globalOffset] upon dragging
   Widget globalPanDetector(
       {required BuildContext context,
@@ -186,5 +188,51 @@ class BoxCanvas extends ConsumerWidget {
     final currentOffset = ref.read(globalOffset);
     final newOffset = currentOffset.add(other: delta);
     ref.read(globalOffset.notifier).setOffset(newOffset);
+  }
+// #endregion
+
+  ///Button that provides options user for creating entities on canvas
+  ///
+  ///The options are specified as [options] variable in [BoxCanvas] constructor
+  ///and these options are parsed into [SpeedDialChild] objects which uses the
+  ///function specified in each option when adding entity to canvas
+  ///
+  ///It is [Align] to bottomRight of screen
+  Widget addEntityButton(
+      {required BuildContext context,
+      required WidgetRef ref,
+      required ChangeNotifierProvider<IEntityPositionNotifier> entityPositions,
+      required StateNotifierProvider<IGlobalOffsetNotifier, XYTuple>
+          globalOffset,
+      required ChangeNotifierProvider<IEntityBodyNotifier> entityBodies,
+      required BoxConstraints constraints}) {
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: SpeedDial(
+        icon: Icons.add,
+        activeIcon: Icons.close,
+        children: [],
+      ),
+    );
+  }
+
+  ///Uses class variable [options] to create list of [SpeedDialChild]
+  ///
+  ///[context] is passed to label maker function of each option to create
+  ///label for their respective [SpeedDialChild]
+  List<SpeedDialChild> optionsToSpeedDialChildren(
+    BuildContext context,
+  ) {
+    List<SpeedDialChild> children = [];
+    for (final option in options) {
+      final label = option.addEntityLabelMaker(context);
+      final child = SpeedDialChild(
+          child: option.icon,
+          label: label,
+          onTap: () {
+            //TODO: should add task be specified by option or box canvas?
+          });
+    }
+    return children;
   }
 }
