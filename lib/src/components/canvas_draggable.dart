@@ -87,6 +87,7 @@ class _CanvasDraggableState extends State<CanvasDraggable> {
     return positioned;
   }
 
+  // #region pan detection
   Widget _entityPanDetector(
       {required BuildContext context,
       required WidgetRef ref,
@@ -124,6 +125,7 @@ class _CanvasDraggableState extends State<CanvasDraggable> {
       yOffset += details.delta.dy;
     });
   }
+// #endregion
 
   // #region resizing detection
   ///[GestureDetector] that updates size of widget when user drags
