@@ -6,6 +6,7 @@ import 'package:box_canvas/src/models/xy_tuple/xy_tuple.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+///Displays given [body] and handles movement and updating coords in providers
 class CanvasDraggable extends StatefulWidget {
   final String id;
   final BoxConstraints constraints;

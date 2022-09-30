@@ -10,6 +10,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:uuid/uuid.dart';
 
+///Displays widgets on screen based on data regarding them in given providers
+///
+///Also, creates [SpeedDial] for adding new widgets based on given [options]
 class BoxCanvas extends ConsumerWidget {
   ///When user pans canvas instead of an individual widget, offset stored here
   ///
