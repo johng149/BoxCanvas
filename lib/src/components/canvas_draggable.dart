@@ -86,6 +86,8 @@ class _CanvasDraggableState extends State<CanvasDraggable> {
     return positioned;
   }
 
+// #region resizing detection
+  ///[GestureDetector] that updates size of widget when user drags
   Widget _entityResizeDetector(
       {required BuildContext context, required WidgetRef ref}) {
     return GestureDetector(
@@ -96,10 +98,15 @@ class _CanvasDraggableState extends State<CanvasDraggable> {
       onPanUpdate: (details) {
         _resizeUpdate(details);
       },
-      child: Icon(Icons.drag_handle),
+      child: const Icon(Icons.drag_handle),
     );
   }
 
+  ///Updates internal state size offsets when resize drag is being updated
+  ///
+  ///This is because going to the provider each time causes too much lag,
+  ///and so this function does not update provider state, to update provider
+  ///state, must call [_resizeEnd]
   void _resizeUpdate(DragUpdateDetails details) {
     setState(() {
       xSizeOffset += details.delta.dx;
@@ -107,6 +114,13 @@ class _CanvasDraggableState extends State<CanvasDraggable> {
     });
   }
 
+  ///Updates provider state with current internal offsets and resets offsets
+  ///
+  ///This should only be called once user has stopped interacting with drag
+  ///handle. After that, will accumulate the drag resize into data in providers
+  ///and reset the temporary drag size offsets.
+  ///
+  ///This function does not update internal resize offsets, see [_resizeUpdate]
   void _resizeEnd({required BuildContext context, required WidgetRef ref}) {
     XYTuple absEntitySize = widget.position.size.toAbsolute(widget.constraints);
     final sizeX = absEntitySize.x + xSizeOffset;
@@ -121,4 +135,5 @@ class _CanvasDraggableState extends State<CanvasDraggable> {
       ySizeOffset = 0;
     });
   }
+// #endregion
 }
