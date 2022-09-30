@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:box_canvas/src/abstract_providers/entity_body_provider_interface.dart';
 import 'package:box_canvas/src/abstract_providers/entity_position_provider_interface.dart';
 import 'package:box_canvas/src/abstract_providers/global_offset_provider_interface.dart';
@@ -48,7 +50,7 @@ class _CanvasDraggableState extends State<CanvasDraggable> {
   ///Creates draggable and resizable card that wraps body in [CanvasDraggable]
   ///
   ///The order in which widgets are nested is as follows:
-  ///entityBody -> entityCard -> entityPanGestureDetector
+  ///entityBody -> entityCard -> entityPanGestureDetector -> SizedBox
   ///
   ///The entityBody contains the body given to [CanvasDraggable] and a resize
   ///detector
@@ -62,12 +64,61 @@ class _CanvasDraggableState extends State<CanvasDraggable> {
         Expanded(child: widget.body),
         Align(
           alignment: Alignment.bottomRight,
-          child: Placeholder(), //TODO add size shifter
+          child: _entityResizeDetector(
+              context: context, ref: ref), //TODO add size shifter
         )
       ],
     );
     final entityCard = outlinedCardMaker(entityBody);
     //TODO add pan gesture detector
-    return entityCard;
+    final absSize = widget.position.size.toAbsolute(widget.constraints);
+    final absPos = widget.position.position.toAbsolute(widget.constraints);
+    final globalOffset = ref.watch(widget.globalOffset);
+    final boxed = SizedBox(
+      width: max(absSize.x + xSizeOffset, 32),
+      height: max(absSize.y + ySizeOffset, 32),
+      child: entityCard,
+    );
+    final positioned = Positioned(
+        left: (absPos.x + xOffset) + globalOffset.x,
+        top: (absPos.y + yOffset) + globalOffset.y,
+        child: boxed);
+    return positioned;
+  }
+
+  Widget _entityResizeDetector(
+      {required BuildContext context, required WidgetRef ref}) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onPanEnd: (details) {
+        _resizeEnd(context: context, ref: ref);
+      },
+      onPanUpdate: (details) {
+        _resizeUpdate(details);
+      },
+      child: Icon(Icons.drag_handle),
+    );
+  }
+
+  void _resizeUpdate(DragUpdateDetails details) {
+    setState(() {
+      xSizeOffset += details.delta.dx;
+      ySizeOffset += details.delta.dy;
+    });
+  }
+
+  void _resizeEnd({required BuildContext context, required WidgetRef ref}) {
+    XYTuple absEntitySize = widget.position.size.toAbsolute(widget.constraints);
+    final sizeX = absEntitySize.x + xSizeOffset;
+    final sizeY = absEntitySize.y + ySizeOffset;
+    XYTuple relEntitySize = XYTuple(x: sizeX, y: sizeY, relative: false)
+        .ensureGr()
+        .toRelative(widget.constraints);
+    EntityPosition newPos = widget.position.copyWith(size: relEntitySize);
+    ref.read(widget.entityPositions).upsert(widget.id, newPos);
+    setState(() {
+      xSizeOffset = 0;
+      ySizeOffset = 0;
+    });
   }
 }
