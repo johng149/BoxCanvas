@@ -87,6 +87,21 @@ class _CanvasDraggableState extends State<CanvasDraggable> {
     return positioned;
   }
 
+  ///Used to bring [CanvasDraggable] to top of [Stack]
+  ///
+  ///It does so by assuming entityPositions provider uses linked hash map
+  ///and removes data referenced by current id and puts it back
+  ///
+  ///If position when doing this should be different from previous,
+  ///set [newPosition] to not null value
+  ///
+  ///Used both by resize and pan detectors
+  void _bringSelfToFront(
+      {required WidgetRef ref, EntityPosition? newPosition}) {
+    final position = newPosition ?? widget.position;
+    ref.read(widget.entityPositions).refreshWithData(widget.id, position);
+  }
+
   // #region pan detection
   Widget _entityPanDetector(
       {required BuildContext context,
@@ -112,7 +127,7 @@ class _CanvasDraggableState extends State<CanvasDraggable> {
         .toRelative(widget.constraints);
     final newEntityPos = widget.position.copyWith(position: relativePos);
 
-    ref.read(widget.entityPositions).refreshWithData(widget.id, newEntityPos);
+    _bringSelfToFront(ref: ref, newPosition: newEntityPos);
     setState(() {
       xOffset = 0;
       yOffset = 0;
@@ -125,7 +140,7 @@ class _CanvasDraggableState extends State<CanvasDraggable> {
       yOffset += details.delta.dy;
     });
   }
-// #endregion
+  // #endregion
 
   // #region resizing detection
   ///[GestureDetector] that updates size of widget when user drags
@@ -170,7 +185,7 @@ class _CanvasDraggableState extends State<CanvasDraggable> {
         .ensureGr()
         .toRelative(widget.constraints);
     EntityPosition newPos = widget.position.copyWith(size: relEntitySize);
-    ref.read(widget.entityPositions).upsert(widget.id, newPos);
+    _bringSelfToFront(ref: ref, newPosition: newPos);
     setState(() {
       xSizeOffset = 0;
       ySizeOffset = 0;
