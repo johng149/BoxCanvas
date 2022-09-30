@@ -70,14 +70,15 @@ class _CanvasDraggableState extends State<CanvasDraggable> {
       ],
     );
     final entityCard = outlinedCardMaker(entityBody);
-    //TODO add pan gesture detector
+    final pannableEntity =
+        _entityPanDetector(context: context, ref: ref, child: entityCard);
     final absSize = widget.position.size.toAbsolute(widget.constraints);
     final absPos = widget.position.position.toAbsolute(widget.constraints);
     final globalOffset = ref.watch(widget.globalOffset);
     final boxed = SizedBox(
       width: max(absSize.x + xSizeOffset, 32),
       height: max(absSize.y + ySizeOffset, 32),
-      child: entityCard,
+      child: pannableEntity,
     );
     final positioned = Positioned(
         left: (absPos.x + xOffset) + globalOffset.x,
@@ -86,7 +87,45 @@ class _CanvasDraggableState extends State<CanvasDraggable> {
     return positioned;
   }
 
-// #region resizing detection
+  Widget _entityPanDetector(
+      {required BuildContext context,
+      required WidgetRef ref,
+      required Widget child}) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onPanEnd: (details) {
+        _panEnd(ref: ref);
+      },
+      onPanUpdate: (details) {
+        _panUpdate(details);
+      },
+      child: child,
+    );
+  }
+
+  void _panEnd({required WidgetRef ref}) {
+    XYTuple absPos = widget.position.position.toAbsolute(widget.constraints);
+    double currentX = absPos.x + xOffset;
+    double currentY = absPos.y + yOffset;
+    XYTuple relativePos = XYTuple(x: currentX, y: currentY, relative: false)
+        .toRelative(widget.constraints);
+    final newEntityPos = widget.position.copyWith(position: relativePos);
+
+    ref.read(widget.entityPositions).refreshWithData(widget.id, newEntityPos);
+    setState(() {
+      xOffset = 0;
+      yOffset = 0;
+    });
+  }
+
+  void _panUpdate(DragUpdateDetails details) {
+    setState(() {
+      xOffset += details.delta.dx;
+      yOffset += details.delta.dy;
+    });
+  }
+
+  // #region resizing detection
   ///[GestureDetector] that updates size of widget when user drags
   Widget _entityResizeDetector(
       {required BuildContext context, required WidgetRef ref}) {
