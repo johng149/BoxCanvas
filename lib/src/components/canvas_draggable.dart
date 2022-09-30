@@ -42,7 +42,6 @@ class _CanvasDraggableState extends State<CanvasDraggable> {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: ((context, ref, child) {
-      final globalOffset = ref.watch(widget.globalOffset);
       return _draggable(context: context, ref: ref);
     }));
   }
@@ -74,7 +73,8 @@ class _CanvasDraggableState extends State<CanvasDraggable> {
         _entityPanDetector(context: context, ref: ref, child: entityCard);
     final absSize = widget.position.size.toAbsolute(widget.constraints);
     final absPos = widget.position.position.toAbsolute(widget.constraints);
-    final globalOffset = ref.watch(widget.globalOffset);
+    final globalOffset =
+        ref.watch(widget.globalOffset).toAbsolute(widget.constraints);
     final boxed = SizedBox(
       width: max(absSize.x + xSizeOffset, 32),
       height: max(absSize.y + ySizeOffset, 32),
