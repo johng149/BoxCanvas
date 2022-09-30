@@ -54,7 +54,6 @@ class BoxCanvas extends ConsumerWidget {
     return LayoutBuilder(builder: (context, constraints) {
       final entities =
           _entities(context: context, ref: ref, constraints: constraints);
-
       //we then use a [Stack] so entities are placed in correct location/depth
       //we also use this to place widgets to detect global pan and add button
       return Stack(
@@ -242,6 +241,7 @@ class BoxCanvas extends ConsumerWidget {
                 option.addEntityFunction(context: context, id: entityId);
             _addEntityToProviders(ref: ref, id: entityId, entity: entity);
           });
+      children.add(child);
     }
     return children;
   }

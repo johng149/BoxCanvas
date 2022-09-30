@@ -32,6 +32,6 @@ class CanvasDraggable extends StatefulWidget {
 class _CanvasDraggableState extends State<CanvasDraggable> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(); //TODO fix this!
   }
 }
