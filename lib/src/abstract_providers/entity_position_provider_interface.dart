@@ -53,5 +53,6 @@ abstract class IEntityPositionNotifier extends ChangeNotifier {
   ///list of widgets in the stack)
   void refreshWithData(String id, EntityPosition data);
 
+  ///Sets position data to given [data] and notifies listeners
   void initialize(Map<String, EntityPosition> data);
 }

@@ -6,6 +6,9 @@ library box_canvas;
 export 'src/abstract_providers/add_entity_option.dart' show AddEntityOption;
 
 //exports for providers used when constructing Canvas component
+//and supporting models
+export 'src/models/xy_tuple/xy_tuple.dart' show XYTuple;
+export 'src/models/entity_position/entity_position.dart' show EntityPosition;
 export 'src/abstract_providers/entity_body_provider_interface.dart'
     show IEntityBodyNotifier;
 export 'src/abstract_providers/entity_position_provider_interface.dart'
