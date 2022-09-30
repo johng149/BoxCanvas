@@ -64,7 +64,14 @@ class BoxCanvas extends ConsumerWidget {
               ref: ref,
               constraints: constraints,
               globalOffset: globalOffset),
-          ...entities
+          ...entities,
+          addEntityButton(
+              context: context,
+              ref: ref,
+              entityPositions: entityPositions,
+              globalOffset: globalOffset,
+              entityBodies: entityBodies,
+              constraints: constraints)
         ],
       );
     });
@@ -189,8 +196,9 @@ class BoxCanvas extends ConsumerWidget {
     final newOffset = currentOffset.add(other: delta);
     ref.read(globalOffset.notifier).setOffset(newOffset);
   }
-// #endregion
+  // #endregion
 
+  // #region for add entity button
   ///Button that provides options user for creating entities on canvas
   ///
   ///The options are specified as [options] variable in [BoxCanvas] constructor
@@ -211,7 +219,7 @@ class BoxCanvas extends ConsumerWidget {
       child: SpeedDial(
         icon: Icons.add,
         activeIcon: Icons.close,
-        children: [],
+        children: optionsToSpeedDialChildren(ref: ref, context: context),
       ),
     );
   }
@@ -221,8 +229,7 @@ class BoxCanvas extends ConsumerWidget {
   ///[context] is passed to label maker function of each option to create
   ///label for their respective [SpeedDialChild]
   List<SpeedDialChild> optionsToSpeedDialChildren(
-    BuildContext context,
-  ) {
+      {required WidgetRef ref, required BuildContext context}) {
     List<SpeedDialChild> children = [];
     for (final option in options) {
       final label = option.addEntityLabelMaker(context);
@@ -230,9 +237,43 @@ class BoxCanvas extends ConsumerWidget {
           child: option.icon,
           label: label,
           onTap: () {
-            //TODO: should add task be specified by option or box canvas?
+            final entityId = _uid.v4();
+            final entity =
+                option.addEntityFunction(context: context, id: entityId);
+            _addEntityToProviders(ref: ref, id: entityId, entity: entity);
           });
     }
     return children;
   }
+
+  ///Adds given [entity] to providers using given [id]
+  ///
+  ///The position of the newly added record depends on the current global pan
+  ///state, and thus the entity will appear in the upper left hand corner
+  ///regardless of how user has globally panned the canvas
+  void _addEntityToProviders(
+      {required WidgetRef ref, required String id, required Widget entity}) {
+    //we want entity to always be added on the upper left hand corner, so
+    //we need to know where the user has global panned so far to ensure
+    //position is correct
+    final currentGlobalOffset = ref.read(globalOffset);
+
+    //since we want the new entities to be added in the same position regardless
+    //of offset, we need to negate it.
+    //
+    //For example, if pan to the right, global offset will be positive,
+    //but since all new entities should start on the left edge of the screen,
+    //we want the negative of offset (which in this example will be negative),
+    //this is so when calculating position to render it, this negative of the
+    //offset will cancel out the global offset, so is entity on left edge
+    final position = currentGlobalOffset.negate();
+
+    //initial size of entity
+    final size = XYTuple(x: 0.25, y: 0.25, relative: true);
+    final entityPosition =
+        EntityPosition(position: position, size: size, relative: true);
+    ref.read(entityPositions).upsert(id, entityPosition);
+    ref.read(entityBodies).set(id, entity);
+  }
+// #endregion
 }
