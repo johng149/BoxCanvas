@@ -20,7 +20,7 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: "92c10ab708bd763688ae1cd391f051f47079d292"
+      resolved-ref: bcd07a9400e0eb42a4cafc5249d3b954671199c9
       url: "https://github.com/johng149/BoxCanvas.git"
     source: git
     version: "0.0.1"
@@ -91,7 +91,7 @@ packages:
       name: flutter_speed_dial
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.0"
+    version: "6.2.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -103,21 +103,21 @@ packages:
       name: freezed_annotation
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0"
+    version: "2.2.0"
   json_annotation:
     dependency: transitive
     description:
       name: json_annotation
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.6.0"
+    version: "4.7.0"
   lints:
     dependency: transitive
     description:
       name: lints
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   matcher:
     dependency: transitive
     description:
@@ -131,7 +131,6 @@ packages:
       name: material_color_utilities
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.5"
     version: "0.1.5"
   meta:
     dependency: transitive
@@ -165,7 +164,6 @@ packages:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.9.0"
     version: "1.9.0"
   stack_trace:
     dependency: transitive
@@ -222,7 +220,7 @@ packages:
       name: uuid
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.6"
+    version: "3.0.7"
   vector_math:
     dependency: transitive
     description:
@@ -232,4 +230,4 @@ packages:
     version: "2.1.2"
 sdks:
   dart: ">=2.18.5 <3.0.0"
-  flutter: ">=1.17.0"
+  flutter: ">=3.0.0"
