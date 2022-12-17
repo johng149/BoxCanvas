@@ -1,8 +1,12 @@
 import 'package:box_canvas/box_canvas.dart';
+import 'package:example/providers/entity_body_provider.dart';
+import 'package:example/providers/entity_position_provider.dart';
+import 'package:example/providers/global_offset_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -33,10 +37,32 @@ class MyApp extends StatelessWidget {
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+  Widget _addEntityFunction(
+      {required BuildContext context, required String id}) {
+    return ListView(
+      key: GlobalKey(),
+      children: [for (int i = 0; i < 32; i++) Text("a" * i)],
+    );
+  }
+
+  String _labelMaker(BuildContext context) {
+    return "List";
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<AddEntityOption> options = [
+      AddEntityOption(
+          addEntityFunction: _addEntityFunction,
+          addEntityLabelMaker: _labelMaker,
+          icon: Icon(Icons.list))
+    ];
     return Scaffold(
         appBar: AppBar(title: const Text("Test AppBar")),
-        body: TestComponent());
+        body: BoxCanvas(
+            globalOffset: globalOffsetProvider,
+            entityPositions: entityPositionProvider,
+            entityBodies: entityBodyProvider,
+            options: options));
   }
 }

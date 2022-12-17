@@ -1,0 +1,1 @@
+BoxCanvas creates a space where widgets wrapped in outlined cards appear and can be moved
