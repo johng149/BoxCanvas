@@ -1,7 +1,7 @@
-import 'package:box_canvas/src/abstract_providers/add_entity_option.dart';
-import 'package:box_canvas/src/abstract_providers/entity_body_provider_interface.dart';
-import 'package:box_canvas/src/abstract_providers/entity_position_provider_interface.dart';
-import 'package:box_canvas/src/abstract_providers/global_offset_provider_interface.dart';
+import 'package:box_canvas/src/providers/add_entity_option.dart';
+import 'package:box_canvas/src/providers/entity_body_notifier.dart';
+import 'package:box_canvas/src/providers/entity_position_provider.dart';
+import 'package:box_canvas/src/providers/global_offset_provider_interface.dart';
 import 'package:box_canvas/src/components/canvas_draggable.dart';
 import 'package:box_canvas/src/models/entity_position/entity_position.dart';
 import 'package:box_canvas/src/models/xy_tuple/xy_tuple.dart';
@@ -18,7 +18,7 @@ class BoxCanvas extends ConsumerWidget {
   ///
   ///This is called offset since all widgets will have their positions modified
   ///by the [XYTuple] referenced by the provider
-  final StateNotifierProvider<IGlobalOffsetNotifier, XYTuple> globalOffset;
+  final StateNotifierProvider<GlobalOffsetNotifier, XYTuple> globalOffset;
 
   ///Information about the positions of widgets in a Map<String,EntityPosition>
   ///
@@ -27,12 +27,12 @@ class BoxCanvas extends ConsumerWidget {
   ///the drag completes does the information in the provider update.
   ///
   ///While dragging, the offsets are stored in [CanvasDraggable] state
-  final ChangeNotifierProvider<IEntityPositionNotifier> entityPositions;
+  final ChangeNotifierProvider<EntityPositionNotifier> entityPositions;
 
   ///Information about the appearance of the widget on canvas
   ///
   ///It is recommended that these widgets use [GlobalKey]
-  final ChangeNotifierProvider<IEntityBodyNotifier> entityBodies;
+  final ChangeNotifierProvider<EntityBodyNotifier> entityBodies;
 
   ///Options to be shown when user clicks button to add widget to canvas
   final List<AddEntityOption> options;
@@ -166,7 +166,7 @@ class BoxCanvas extends ConsumerWidget {
       {required BuildContext context,
       required WidgetRef ref,
       required BoxConstraints constraints,
-      required StateNotifierProvider<IGlobalOffsetNotifier, XYTuple>
+      required StateNotifierProvider<GlobalOffsetNotifier, XYTuple>
           globalOffset}) {
     return GestureDetector(
         behavior: HitTestBehavior.opaque,
@@ -188,7 +188,7 @@ class BoxCanvas extends ConsumerWidget {
       {required DragUpdateDetails details,
       required WidgetRef ref,
       required BoxConstraints constraints,
-      required StateNotifierProvider<IGlobalOffsetNotifier, XYTuple>
+      required StateNotifierProvider<GlobalOffsetNotifier, XYTuple>
           globalOffset}) {
     final dx = details.delta.dx;
     final dy = details.delta.dy;
@@ -211,10 +211,10 @@ class BoxCanvas extends ConsumerWidget {
   Widget addEntityButton(
       {required BuildContext context,
       required WidgetRef ref,
-      required ChangeNotifierProvider<IEntityPositionNotifier> entityPositions,
-      required StateNotifierProvider<IGlobalOffsetNotifier, XYTuple>
+      required ChangeNotifierProvider<EntityPositionNotifier> entityPositions,
+      required StateNotifierProvider<GlobalOffsetNotifier, XYTuple>
           globalOffset,
-      required ChangeNotifierProvider<IEntityBodyNotifier> entityBodies,
+      required ChangeNotifierProvider<EntityBodyNotifier> entityBodies,
       required BoxConstraints constraints}) {
     return Align(
       alignment: Alignment.bottomRight,

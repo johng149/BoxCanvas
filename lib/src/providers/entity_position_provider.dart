@@ -7,20 +7,28 @@ import 'package:flutter/cupertino.dart';
 ///
 ///Assumes all [EntityPosition] has [isRelative] as true (see [EntityPosition
 ///class for more information])
-abstract class IEntityPositionNotifier extends ChangeNotifier {
-  Map<String, EntityPosition> get allData;
+class EntityPositionNotifier extends ChangeNotifier {
+  Map<String, EntityPosition> data = {};
+  Map<String, EntityPosition> get allData => data;
 
-  Iterable<String> get ids;
+  Iterable<String> get ids => data.keys;
 
   ///Attempt to read position referred to by [id]
-  EntityPosition? accessOpt(String id);
+  EntityPosition? accessOpt(String id) {
+    return data[id];
+  }
 
   ///Update or inserts [data] with pointer of [id] uniquely referring to it
   ///
   ///Use [notify] parameter to avoid notifying listeners. This should only
   ///be set to false if the function that calls this will notify listeners
   ///(to prevent unnecessary notifications)
-  void upsert(String id, EntityPosition data, [bool notify = true]);
+  void upsert(String id, EntityPosition data, [bool notify = true]) {
+    this.data[id] = data;
+    if (notify) {
+      notifyListeners();
+    }
+  }
 
   ///Removes data referred to by [id] if it exists
   ///
@@ -29,7 +37,13 @@ abstract class IEntityPositionNotifier extends ChangeNotifier {
   ///Use [notify] parameter to avoid notifying listeners. This should only
   ///be set to false if the function that calls this will notify listeners
   ///(to prevent unnecessary notifications)
-  EntityPosition? remove(String id, [bool notify = true]);
+  EntityPosition? remove(String id, [bool notify = true]) {
+    final removed = data.remove(id);
+    if (notify && removed != null) {
+      notifyListeners();
+    }
+    return removed;
+  }
 
   ///Removes data referrred to by [id] and then [upsert] said data with [id]
   ///
@@ -40,7 +54,12 @@ abstract class IEntityPositionNotifier extends ChangeNotifier {
   ///By removing and then reinserting the data, the widget that uses the
   ///data should now occur at the top of stack (in other words, last in the
   ///list of widgets in the stack)
-  void refresh(String id);
+  void refresh(String id) {
+    final removed = remove(id, false);
+    if (removed != null) {
+      upsert(id, removed);
+    }
+  }
 
   ///Removes data referred to by [id] and then [upsert] given [data] with [id]
   ///
@@ -51,8 +70,16 @@ abstract class IEntityPositionNotifier extends ChangeNotifier {
   ///By removing and then reinserting the data, the widget that uses the
   ///data should now occur at the top of stack (in other words, last in the
   ///list of widgets in the stack)
-  void refreshWithData(String id, EntityPosition data);
+  void refreshWithData(String id, EntityPosition data) {
+    final removed = remove(id, false);
+    if (removed != null) {
+      upsert(id, data);
+    }
+  }
 
   ///Sets position data to given [data] and notifies listeners
-  void initialize(Map<String, EntityPosition> data);
+  void initialize(Map<String, EntityPosition> data) {
+    this.data = data;
+    notifyListeners();
+  }
 }

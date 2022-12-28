@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import 'package:box_canvas/src/abstract_providers/entity_body_provider_interface.dart';
-import 'package:box_canvas/src/abstract_providers/entity_position_provider_interface.dart';
-import 'package:box_canvas/src/abstract_providers/global_offset_provider_interface.dart';
+import 'package:box_canvas/src/providers/entity_body_notifier.dart';
+import 'package:box_canvas/src/providers/entity_position_provider.dart';
+import 'package:box_canvas/src/providers/global_offset_provider_interface.dart';
 import 'package:box_canvas/src/builders/outlined_card.dart';
 import 'package:box_canvas/src/models/entity_position/entity_position.dart';
 import 'package:box_canvas/src/models/xy_tuple/xy_tuple.dart';
@@ -13,9 +13,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class CanvasDraggable extends StatefulWidget {
   final String id;
   final BoxConstraints constraints;
-  final StateNotifierProvider<IGlobalOffsetNotifier, XYTuple> globalOffset;
-  final ChangeNotifierProvider<IEntityPositionNotifier> entityPositions;
-  final ChangeNotifierProvider<IEntityBodyNotifier> entityBodies;
+  final StateNotifierProvider<GlobalOffsetNotifier, XYTuple> globalOffset;
+  final ChangeNotifierProvider<EntityPositionNotifier> entityPositions;
+  final ChangeNotifierProvider<EntityBodyNotifier> entityBodies;
   final Widget body;
   final EntityPosition position;
   const CanvasDraggable(
