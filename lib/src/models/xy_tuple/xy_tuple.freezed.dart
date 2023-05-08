@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'xy_tuple.dart';
 
@@ -32,38 +32,42 @@ mixin _$XYTuple {
 /// @nodoc
 abstract class $XYTupleCopyWith<$Res> {
   factory $XYTupleCopyWith(XYTuple value, $Res Function(XYTuple) then) =
-      _$XYTupleCopyWithImpl<$Res>;
+      _$XYTupleCopyWithImpl<$Res, XYTuple>;
+  @useResult
   $Res call({double x, double y, bool relative});
 }
 
 /// @nodoc
-class _$XYTupleCopyWithImpl<$Res> implements $XYTupleCopyWith<$Res> {
+class _$XYTupleCopyWithImpl<$Res, $Val extends XYTuple>
+    implements $XYTupleCopyWith<$Res> {
   _$XYTupleCopyWithImpl(this._value, this._then);
 
-  final XYTuple _value;
   // ignore: unused_field
-  final $Res Function(XYTuple) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? x = freezed,
-    Object? y = freezed,
-    Object? relative = freezed,
+    Object? x = null,
+    Object? y = null,
+    Object? relative = null,
   }) {
     return _then(_value.copyWith(
-      x: x == freezed
+      x: null == x
           ? _value.x
           : x // ignore: cast_nullable_to_non_nullable
               as double,
-      y: y == freezed
+      y: null == y
           ? _value.y
           : y // ignore: cast_nullable_to_non_nullable
               as double,
-      relative: relative == freezed
+      relative: null == relative
           ? _value.relative
           : relative // ignore: cast_nullable_to_non_nullable
               as bool,
-    ));
+    ) as $Val);
   }
 }
 
@@ -73,34 +77,34 @@ abstract class _$$_XYTupleCopyWith<$Res> implements $XYTupleCopyWith<$Res> {
           _$_XYTuple value, $Res Function(_$_XYTuple) then) =
       __$$_XYTupleCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({double x, double y, bool relative});
 }
 
 /// @nodoc
-class __$$_XYTupleCopyWithImpl<$Res> extends _$XYTupleCopyWithImpl<$Res>
+class __$$_XYTupleCopyWithImpl<$Res>
+    extends _$XYTupleCopyWithImpl<$Res, _$_XYTuple>
     implements _$$_XYTupleCopyWith<$Res> {
   __$$_XYTupleCopyWithImpl(_$_XYTuple _value, $Res Function(_$_XYTuple) _then)
-      : super(_value, (v) => _then(v as _$_XYTuple));
+      : super(_value, _then);
 
-  @override
-  _$_XYTuple get _value => super._value as _$_XYTuple;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? x = freezed,
-    Object? y = freezed,
-    Object? relative = freezed,
+    Object? x = null,
+    Object? y = null,
+    Object? relative = null,
   }) {
     return _then(_$_XYTuple(
-      x: x == freezed
+      x: null == x
           ? _value.x
           : x // ignore: cast_nullable_to_non_nullable
               as double,
-      y: y == freezed
+      y: null == y
           ? _value.y
           : y // ignore: cast_nullable_to_non_nullable
               as double,
-      relative: relative == freezed
+      relative: null == relative
           ? _value.relative
           : relative // ignore: cast_nullable_to_non_nullable
               as bool,
@@ -134,21 +138,19 @@ class _$_XYTuple extends _XYTuple {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_XYTuple &&
-            const DeepCollectionEquality().equals(other.x, x) &&
-            const DeepCollectionEquality().equals(other.y, y) &&
-            const DeepCollectionEquality().equals(other.relative, relative));
+            (identical(other.x, x) || other.x == x) &&
+            (identical(other.y, y) || other.y == y) &&
+            (identical(other.relative, relative) ||
+                other.relative == relative));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(x),
-      const DeepCollectionEquality().hash(y),
-      const DeepCollectionEquality().hash(relative));
+  int get hashCode => Object.hash(runtimeType, x, y, relative);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_XYTupleCopyWith<_$_XYTuple> get copyWith =>
       __$$_XYTupleCopyWithImpl<_$_XYTuple>(this, _$identity);
 
