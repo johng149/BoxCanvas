@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'entity_position.dart';
 
@@ -34,7 +34,8 @@ mixin _$EntityPosition {
 abstract class $EntityPositionCopyWith<$Res> {
   factory $EntityPositionCopyWith(
           EntityPosition value, $Res Function(EntityPosition) then) =
-      _$EntityPositionCopyWithImpl<$Res>;
+      _$EntityPositionCopyWithImpl<$Res, EntityPosition>;
+  @useResult
   $Res call({XYTuple position, XYTuple size, bool relative});
 
   $XYTupleCopyWith<$Res> get position;
@@ -42,47 +43,51 @@ abstract class $EntityPositionCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$EntityPositionCopyWithImpl<$Res>
+class _$EntityPositionCopyWithImpl<$Res, $Val extends EntityPosition>
     implements $EntityPositionCopyWith<$Res> {
   _$EntityPositionCopyWithImpl(this._value, this._then);
 
-  final EntityPosition _value;
   // ignore: unused_field
-  final $Res Function(EntityPosition) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? position = freezed,
-    Object? size = freezed,
-    Object? relative = freezed,
+    Object? position = null,
+    Object? size = null,
+    Object? relative = null,
   }) {
     return _then(_value.copyWith(
-      position: position == freezed
+      position: null == position
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
               as XYTuple,
-      size: size == freezed
+      size: null == size
           ? _value.size
           : size // ignore: cast_nullable_to_non_nullable
               as XYTuple,
-      relative: relative == freezed
+      relative: null == relative
           ? _value.relative
           : relative // ignore: cast_nullable_to_non_nullable
               as bool,
-    ));
+    ) as $Val);
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $XYTupleCopyWith<$Res> get position {
     return $XYTupleCopyWith<$Res>(_value.position, (value) {
-      return _then(_value.copyWith(position: value));
+      return _then(_value.copyWith(position: value) as $Val);
     });
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $XYTupleCopyWith<$Res> get size {
     return $XYTupleCopyWith<$Res>(_value.size, (value) {
-      return _then(_value.copyWith(size: value));
+      return _then(_value.copyWith(size: value) as $Val);
     });
   }
 }
@@ -94,6 +99,7 @@ abstract class _$$_EntityPositionCopyWith<$Res>
           _$_EntityPosition value, $Res Function(_$_EntityPosition) then) =
       __$$_EntityPositionCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({XYTuple position, XYTuple size, bool relative});
 
   @override
@@ -104,31 +110,29 @@ abstract class _$$_EntityPositionCopyWith<$Res>
 
 /// @nodoc
 class __$$_EntityPositionCopyWithImpl<$Res>
-    extends _$EntityPositionCopyWithImpl<$Res>
+    extends _$EntityPositionCopyWithImpl<$Res, _$_EntityPosition>
     implements _$$_EntityPositionCopyWith<$Res> {
   __$$_EntityPositionCopyWithImpl(
       _$_EntityPosition _value, $Res Function(_$_EntityPosition) _then)
-      : super(_value, (v) => _then(v as _$_EntityPosition));
+      : super(_value, _then);
 
-  @override
-  _$_EntityPosition get _value => super._value as _$_EntityPosition;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? position = freezed,
-    Object? size = freezed,
-    Object? relative = freezed,
+    Object? position = null,
+    Object? size = null,
+    Object? relative = null,
   }) {
     return _then(_$_EntityPosition(
-      position: position == freezed
+      position: null == position
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
               as XYTuple,
-      size: size == freezed
+      size: null == size
           ? _value.size
           : size // ignore: cast_nullable_to_non_nullable
               as XYTuple,
-      relative: relative == freezed
+      relative: null == relative
           ? _value.relative
           : relative // ignore: cast_nullable_to_non_nullable
               as bool,
@@ -163,21 +167,20 @@ class _$_EntityPosition extends _EntityPosition {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_EntityPosition &&
-            const DeepCollectionEquality().equals(other.position, position) &&
-            const DeepCollectionEquality().equals(other.size, size) &&
-            const DeepCollectionEquality().equals(other.relative, relative));
+            (identical(other.position, position) ||
+                other.position == position) &&
+            (identical(other.size, size) || other.size == size) &&
+            (identical(other.relative, relative) ||
+                other.relative == relative));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(position),
-      const DeepCollectionEquality().hash(size),
-      const DeepCollectionEquality().hash(relative));
+  int get hashCode => Object.hash(runtimeType, position, size, relative);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_EntityPositionCopyWith<_$_EntityPosition> get copyWith =>
       __$$_EntityPositionCopyWithImpl<_$_EntityPosition>(this, _$identity);
 

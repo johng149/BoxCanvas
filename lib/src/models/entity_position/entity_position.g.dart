@@ -15,7 +15,7 @@ _$_EntityPosition _$$_EntityPositionFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$_EntityPositionToJson(_$_EntityPosition instance) =>
     <String, dynamic>{
-      'position': instance.position,
-      'size': instance.size,
+      'position': instance.position.toJson(),
+      'size': instance.size.toJson(),
       'relative': instance.relative,
     };
