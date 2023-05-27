@@ -1,3 +1,4 @@
+import 'package:box_canvas/src/definitions/add_entity_callback_typedef.dart';
 import 'package:box_canvas/src/providers/add_entity_option.dart';
 import 'package:box_canvas/src/providers/entity_body_notifier.dart';
 import 'package:box_canvas/src/providers/entity_position_provider.dart';
@@ -37,6 +38,9 @@ class BoxCanvas extends ConsumerWidget {
   ///Options to be shown when user clicks button to add widget to canvas
   final List<AddEntityOption> options;
 
+  ///Callback for when entity is added to canvas
+  final AddEntityCallback? addEntityCallback;
+
   ///Used when creating widgets to given them unique identifier
   final _uid = const Uuid();
 
@@ -45,7 +49,8 @@ class BoxCanvas extends ConsumerWidget {
       required this.globalOffset,
       required this.entityPositions,
       required this.entityBodies,
-      required this.options})
+      required this.options,
+      this.addEntityCallback})
       : super(key: key);
 
   @override
@@ -277,6 +282,7 @@ class BoxCanvas extends ConsumerWidget {
         EntityPosition(position: position, size: size, relative: true);
     ref.read(entityPositions).upsert(id, entityPosition);
     ref.read(entityBodies).set(id, entity);
+    addEntityCallback?.call(position: entityPosition, id: id);
   }
 // #endregion
 }
