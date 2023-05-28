@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:box_canvas/src/definitions/entity_drag_callback_typedefs.dart';
 import 'package:box_canvas/src/providers/entity_body_notifier.dart';
 import 'package:box_canvas/src/providers/entity_position_provider.dart';
 import 'package:box_canvas/src/providers/global_offset_provider_interface.dart';
@@ -18,6 +19,8 @@ class CanvasDraggable extends StatefulWidget {
   final ChangeNotifierProvider<EntityBodyNotifier> entityBodies;
   final Widget body;
   final EntityPosition position;
+  final EntityDragCallback? onDragEnd;
+  final EntityResizeCallback? onResizeEnd;
   const CanvasDraggable(
       {Key? key,
       required this.id,
@@ -26,7 +29,9 @@ class CanvasDraggable extends StatefulWidget {
       required this.entityPositions,
       required this.entityBodies,
       required this.body,
-      required this.position})
+      required this.position,
+      this.onDragEnd,
+      this.onResizeEnd})
       : super(key: key);
 
   @override
@@ -128,6 +133,8 @@ class _CanvasDraggableState extends State<CanvasDraggable> {
     final newEntityPos = widget.position.copyWith(position: relativePos);
 
     _bringSelfToFront(ref: ref, newPosition: newEntityPos);
+
+    widget.onDragEnd?.call(id: widget.id, position: newEntityPos);
     setState(() {
       xOffset = 0;
       yOffset = 0;
@@ -186,6 +193,7 @@ class _CanvasDraggableState extends State<CanvasDraggable> {
         .toRelative(widget.constraints);
     EntityPosition newPos = widget.position.copyWith(size: relEntitySize);
     _bringSelfToFront(ref: ref, newPosition: newPos);
+    widget.onResizeEnd?.call(id: widget.id, position: newPos);
     setState(() {
       xSizeOffset = 0;
       ySizeOffset = 0;
