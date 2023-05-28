@@ -1,4 +1,5 @@
 import 'package:box_canvas/src/definitions/add_entity_callback_typedef.dart';
+import 'package:box_canvas/src/definitions/entity_drag_callback_typedefs.dart';
 import 'package:box_canvas/src/providers/add_entity_option.dart';
 import 'package:box_canvas/src/providers/entity_body_notifier.dart';
 import 'package:box_canvas/src/providers/entity_position_provider.dart';
@@ -41,6 +42,12 @@ class BoxCanvas extends ConsumerWidget {
   ///Callback for when entity is added to canvas
   final AddEntityCallback? addEntityCallback;
 
+  ///Callback for entity drag completion
+  final EntityDragCallback? onDragEnd;
+
+  ///Callback for entity resize completion
+  final EntityResizeCallback? onResizeEnd;
+
   ///Used when creating widgets to given them unique identifier
   final _uid = const Uuid();
 
@@ -50,7 +57,9 @@ class BoxCanvas extends ConsumerWidget {
       required this.entityPositions,
       required this.entityBodies,
       required this.options,
-      this.addEntityCallback})
+      this.addEntityCallback,
+      this.onDragEnd,
+      this.onResizeEnd})
       : super(key: key);
 
   @override
@@ -113,6 +122,8 @@ class BoxCanvas extends ConsumerWidget {
             globalOffset: globalOffset,
             entityPositions: entityPositions,
             entityBodies: entityBodies,
+            onDragEnd: onDragEnd,
+            onResizeEnd: onResizeEnd,
 
             //we can use null checks here since if [_entitiesVisible] function
             //returned true (and thus allowing us to run this code), it must

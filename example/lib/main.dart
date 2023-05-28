@@ -55,6 +55,18 @@ class HomePage extends StatelessWidget {
     print("position: $position, id: $id");
   }
 
+  /// entity drag callback
+  void _dragCallback({required String id, required EntityPosition position}) {
+    // for debugging, will just print the position and id
+    print("position: $position, id: $id");
+  }
+
+  /// entity resize callback
+  void _resizeCallback({required String id, required EntityPosition position}) {
+    // for debugging, will just print the position and id
+    print("position: $position, id: $id");
+  }
+
   @override
   Widget build(BuildContext context) {
     List<AddEntityOption> options = [
@@ -70,6 +82,8 @@ class HomePage extends StatelessWidget {
             entityPositions: entityPositionProvider,
             entityBodies: entityBodyProvider,
             options: options,
-            addEntityCallback: _addCallback));
+            addEntityCallback: _addCallback,
+            onDragEnd: _dragCallback,
+            onResizeEnd: _resizeCallback));
   }
 }
