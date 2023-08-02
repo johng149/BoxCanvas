@@ -37,12 +37,14 @@ class MyApp extends StatelessWidget {
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  Widget _addEntityFunction(
+  AddEntityResponse<String> _addEntityFunction(
       {required BuildContext context, required String id}) {
-    return ListView(
+    final widget = ListView(
       key: GlobalKey(),
       children: [for (int i = 0; i < 32; i++) Text("a" * i)],
     );
+    final info = "entity info of id: $id";
+    return AddEntityResponse<String>(info: info, widget: widget);
   }
 
   String _labelMaker(BuildContext context) {
@@ -50,9 +52,12 @@ class HomePage extends StatelessWidget {
   }
 
   /// the add entity callback
-  void _addCallback({required EntityPosition position, required String id}) {
+  void _addCallback(
+      {required EntityPosition position,
+      required String id,
+      required String info}) {
     // for debugging, will just print the position and id
-    print("position: $position, id: $id");
+    print("position: $position, id: $id, with info: $info");
   }
 
   /// entity drag callback
@@ -69,15 +74,15 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<AddEntityOption> options = [
-      AddEntityOption(
+    List<AddEntityOption<String>> options = [
+      AddEntityOption<String>(
           addEntityFunction: _addEntityFunction,
           addEntityLabelMaker: _labelMaker,
           icon: Icon(Icons.list))
     ];
     return Scaffold(
         appBar: AppBar(title: const Text("Test AppBar")),
-        body: BoxCanvas(
+        body: BoxCanvas<String>(
             globalOffset: globalOffsetProvider,
             entityPositions: entityPositionProvider,
             entityBodies: entityBodyProvider,
