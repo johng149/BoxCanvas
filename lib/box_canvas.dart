@@ -15,5 +15,8 @@ export 'src/providers/entity_position_provider.dart'
 export 'src/providers/global_offset_provider_interface.dart'
     show GlobalOffsetNotifier;
 
+export 'src/models/add_entity_response/add_entity_response.dart'
+    show AddEntityResponse;
+
 //BoxCanvas export
 export 'src/components/box_canvas.dart' show BoxCanvas;

@@ -1,5 +1,6 @@
 import 'package:box_canvas/src/definitions/add_entity_callback_typedef.dart';
 import 'package:box_canvas/src/definitions/entity_drag_callback_typedefs.dart';
+import 'package:box_canvas/src/models/add_entity_response/add_entity_response.dart';
 import 'package:box_canvas/src/providers/add_entity_option.dart';
 import 'package:box_canvas/src/providers/entity_body_notifier.dart';
 import 'package:box_canvas/src/providers/entity_position_provider.dart';
@@ -15,7 +16,7 @@ import 'package:uuid/uuid.dart';
 ///Displays widgets on screen based on data regarding them in given providers
 ///
 ///Also, creates [SpeedDial] for adding new widgets based on given [options]
-class BoxCanvas extends ConsumerWidget {
+class BoxCanvas<T> extends ConsumerWidget {
   ///When user pans canvas instead of an individual widget, offset stored here
   ///
   ///This is called offset since all widgets will have their positions modified
@@ -37,10 +38,10 @@ class BoxCanvas extends ConsumerWidget {
   final ChangeNotifierProvider<EntityBodyNotifier> entityBodies;
 
   ///Options to be shown when user clicks button to add widget to canvas
-  final List<AddEntityOption> options;
+  final List<AddEntityOption<T>> options;
 
   ///Callback for when entity is added to canvas
-  final AddEntityCallback? addEntityCallback;
+  final AddEntityCallback<T>? addEntityCallback;
 
   ///Callback for entity drag completion
   final EntityDragCallback? onDragEnd;
@@ -258,20 +259,22 @@ class BoxCanvas extends ConsumerWidget {
             final entityId = _uid.v4();
             final entity =
                 option.addEntityFunction(context: context, id: entityId);
-            _addEntityToProviders(ref: ref, id: entityId, entity: entity);
+            _addEntityToProviders(ref: ref, id: entityId, response: entity);
           });
       children.add(child);
     }
     return children;
   }
 
-  ///Adds given [entity] to providers using given [id]
+  ///Adds given [response] to providers using given [id]
   ///
   ///The position of the newly added record depends on the current global pan
   ///state, and thus the entity will appear in the upper left hand corner
   ///regardless of how user has globally panned the canvas
   void _addEntityToProviders(
-      {required WidgetRef ref, required String id, required Widget entity}) {
+      {required WidgetRef ref,
+      required String id,
+      required AddEntityResponse<T> response}) {
     //we want entity to always be added on the upper left hand corner, so
     //we need to know where the user has global panned so far to ensure
     //position is correct
@@ -291,9 +294,11 @@ class BoxCanvas extends ConsumerWidget {
     final size = XYTuple(x: 0.25, y: 0.25, relative: true);
     final entityPosition =
         EntityPosition(position: position, size: size, relative: true);
+    final entity = response.widget;
     ref.read(entityPositions).upsert(id, entityPosition);
     ref.read(entityBodies).set(id, entity);
-    addEntityCallback?.call(position: entityPosition, id: id);
+    addEntityCallback?.call(
+        position: entityPosition, id: id, info: response.info);
   }
 // #endregion
 }
