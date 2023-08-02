@@ -268,3 +268,5 @@ generated_plugin_registrant.cc
 generated_plugin_registrant.h
 generated_plugins.cmake
 GeneratedPluginRegistrant.swift
+macos/Flutter/ephemeral/flutter_export_environment.sh
+macos/Flutter/ephemeral/Flutter-Generated.xcconfig
