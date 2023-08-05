@@ -1,4 +1,5 @@
 import 'package:box_canvas/src/definitions/add_entity_callback_typedef.dart';
+import 'package:box_canvas/src/definitions/custom_entity_id_callback.typedef.dart';
 import 'package:box_canvas/src/definitions/entity_drag_callback_typedefs.dart';
 import 'package:box_canvas/src/models/add_entity_response/add_entity_response.dart';
 import 'package:box_canvas/src/providers/add_entity_option.dart';
@@ -49,6 +50,9 @@ class BoxCanvas<T> extends ConsumerWidget {
   ///Callback for entity resize completion
   final EntityResizeCallback? onResizeEnd;
 
+  ///Callback to change how id is assigned to new entities
+  final CustomEntityIdCallback<T>? customEntityIdCallback;
+
   ///Used when creating widgets to given them unique identifier
   final _uid = const Uuid();
 
@@ -59,6 +63,7 @@ class BoxCanvas<T> extends ConsumerWidget {
       required this.entityBodies,
       required this.options,
       this.addEntityCallback,
+      this.customEntityIdCallback,
       this.onDragEnd,
       this.onResizeEnd})
       : super(key: key);
@@ -271,6 +276,9 @@ class BoxCanvas<T> extends ConsumerWidget {
   ///The position of the newly added record depends on the current global pan
   ///state, and thus the entity will appear in the upper left hand corner
   ///regardless of how user has globally panned the canvas
+  ///
+  ///if custom entity id callback is specified, then [id] will be ignored
+  ///and the result of the callback will be used as the id instead
   void _addEntityToProviders(
       {required WidgetRef ref,
       required String id,
@@ -295,10 +303,13 @@ class BoxCanvas<T> extends ConsumerWidget {
     final entityPosition =
         EntityPosition(position: position, size: size, relative: true);
     final entity = response.widget;
-    ref.read(entityPositions).upsert(id, entityPosition);
-    ref.read(entityBodies).set(id, entity);
+    final entityId = customEntityIdCallback?.call(
+            proposedId: id, position: entityPosition, info: response) ??
+        id;
+    ref.read(entityPositions).upsert(entityId, entityPosition);
+    ref.read(entityBodies).set(entityId, entity);
     addEntityCallback?.call(
-        position: entityPosition, id: id, info: response.info);
+        position: entityPosition, id: entityId, info: response.info);
   }
 // #endregion
 }
