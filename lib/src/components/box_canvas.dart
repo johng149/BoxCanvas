@@ -307,8 +307,13 @@ class BoxCanvas<T> extends ConsumerWidget {
       customEntityIdCallback!
           .call(proposedId: id, position: entityPosition, info: response)
           .then((value) {
-        _addEntityToProvidersHelper(
-            ref: ref, id: value, response: response, position: entityPosition);
+        if (value != null) {
+          _addEntityToProvidersHelper(
+              ref: ref,
+              id: value,
+              response: response,
+              position: entityPosition);
+        }
       });
     } else {
       _addEntityToProvidersHelper(

@@ -7,7 +7,9 @@ import 'package:box_canvas/box_canvas.dart';
 ///
 /// this is async as it is expected for the callback to interact with
 /// backend services to generate the id
-typedef CustomEntityIdCallback<T> = Future<String> Function(
+///
+/// if the resulting id is null, the entity will not be added
+typedef CustomEntityIdCallback<T> = Future<String?> Function(
     {required String proposedId,
     required EntityPosition position,
     required AddEntityResponse<T> info});
