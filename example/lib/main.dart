@@ -72,11 +72,11 @@ class HomePage extends StatelessWidget {
     print("position: $position, id: $id");
   }
 
-  String _customIdCallback(
+  Future<String> _customIdCallback(
       {required String proposedId,
       required EntityPosition position,
       required AddEntityResponse<String> info}) {
-    return "$proposedId Nice!";
+    return Future.value("$proposedId NICE!");
   }
 
   @override

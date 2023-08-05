@@ -22,7 +22,7 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: f38cae41898fb51dfbab742c37372df6ef1cd78a
+      resolved-ref: b84f0d1082059622ea23ed594f2bc7461aa26b28
       url: "https://github.com/johng149/BoxCanvas.git"
     source: git
     version: "0.0.1"
