@@ -303,13 +303,27 @@ class BoxCanvas<T> extends ConsumerWidget {
     final entityPosition =
         EntityPosition(position: position, size: size, relative: true);
     final entity = response.widget;
-    final entityId = customEntityIdCallback?.call(
-            proposedId: id, position: entityPosition, info: response) ??
-        id;
-    ref.read(entityPositions).upsert(entityId, entityPosition);
-    ref.read(entityBodies).set(entityId, entity);
-    addEntityCallback?.call(
-        position: entityPosition, id: entityId, info: response.info);
+    if (customEntityIdCallback != null) {
+      customEntityIdCallback!
+          .call(proposedId: id, position: entityPosition, info: response)
+          .then((value) {
+        _addEntityToProvidersHelper(
+            ref: ref, id: value, response: response, position: entityPosition);
+      });
+    } else {
+      _addEntityToProvidersHelper(
+          ref: ref, id: id, response: response, position: entityPosition);
+    }
+  }
+
+  void _addEntityToProvidersHelper(
+      {required WidgetRef ref,
+      required String id,
+      required AddEntityResponse<T> response,
+      required EntityPosition position}) {
+    ref.read(entityPositions).upsert(id, position);
+    ref.read(entityBodies).set(id, response.widget);
+    addEntityCallback?.call(position: position, id: id, info: response.info);
   }
 // #endregion
 }
