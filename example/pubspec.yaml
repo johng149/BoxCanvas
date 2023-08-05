@@ -42,7 +42,7 @@ dependencies:
   box_canvas:
     git:
       url: https://github.com/johng149/BoxCanvas.git
-      ref: master
+      ref: test
     
 dev_dependencies:
   flutter_test:

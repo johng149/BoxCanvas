@@ -72,6 +72,13 @@ class HomePage extends StatelessWidget {
     print("position: $position, id: $id");
   }
 
+  String _customIdCallback(
+      {required String proposedId,
+      required EntityPosition position,
+      required AddEntityResponse<String> info}) {
+    return "$proposedId Nice!";
+  }
+
   @override
   Widget build(BuildContext context) {
     List<AddEntityOption<String>> options = [
@@ -88,6 +95,7 @@ class HomePage extends StatelessWidget {
             entityBodies: entityBodyProvider,
             options: options,
             addEntityCallback: _addCallback,
+            customEntityIdCallback: _customIdCallback,
             onDragEnd: _dragCallback,
             onResizeEnd: _resizeCallback));
   }

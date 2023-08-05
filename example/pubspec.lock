@@ -21,8 +21,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: master
-      resolved-ref: "7413a4d8f77c62f6a489e4f18b4930897ad99af0"
+      ref: test
+      resolved-ref: bdf9b8936a4e94a970546ce49a7ef26f08fcd444
       url: "https://github.com/johng149/BoxCanvas.git"
     source: git
     version: "0.0.1"
