@@ -261,10 +261,7 @@ class BoxCanvas<T> extends ConsumerWidget {
           child: option.icon,
           label: label,
           onTap: () {
-            final entityId = _uid.v4();
-            final entity =
-                option.addEntityFunction(context: context, id: entityId);
-            _addEntityToProviders(ref: ref, id: entityId, response: entity);
+            _addEntityToProviders(ref: ref, option: option, context: context);
           });
       children.add(child);
     }
@@ -280,9 +277,9 @@ class BoxCanvas<T> extends ConsumerWidget {
   ///if custom entity id callback is specified, then [id] will be ignored
   ///and the result of the callback will be used as the id instead
   void _addEntityToProviders(
-      {required WidgetRef ref,
-      required String id,
-      required AddEntityResponse<T> response}) {
+      {required BuildContext context,
+      required WidgetRef ref,
+      required AddEntityOption<T> option}) {
     //we want entity to always be added on the upper left hand corner, so
     //we need to know where the user has global panned so far to ensure
     //position is correct
@@ -302,33 +299,43 @@ class BoxCanvas<T> extends ConsumerWidget {
     final size = XYTuple(x: 0.25, y: 0.25, relative: true);
     final entityPosition =
         EntityPosition(position: position, size: size, relative: true);
-    final entity = response.widget;
+
+    final info = option.addEntityPrimer();
+    final canidateId = _uid.v4();
     if (customEntityIdCallback != null) {
       customEntityIdCallback!
-          .call(proposedId: id, position: entityPosition, info: response)
+          .call(proposedId: canidateId, position: entityPosition, info: info)
           .then((value) {
         if (value != null) {
+          final entity = option.addEntityFunction(context: context, id: value);
           _addEntityToProvidersHelper(
               ref: ref,
               id: value,
-              response: response,
-              position: entityPosition);
+              response: entity,
+              position: entityPosition,
+              info: info);
         }
       });
     } else {
+      final entity = option.addEntityFunction(context: context, id: canidateId);
       _addEntityToProvidersHelper(
-          ref: ref, id: id, response: response, position: entityPosition);
+          ref: ref,
+          id: canidateId,
+          response: entity,
+          position: entityPosition,
+          info: info);
     }
   }
 
   void _addEntityToProvidersHelper(
       {required WidgetRef ref,
       required String id,
-      required AddEntityResponse<T> response,
+      required Widget response,
+      required T info,
       required EntityPosition position}) {
     ref.read(entityPositions).upsert(id, position);
-    ref.read(entityBodies).set(id, response.widget);
-    addEntityCallback?.call(position: position, id: id, info: response.info);
+    ref.read(entityBodies).set(id, response);
+    addEntityCallback?.call(position: position, id: id, info: info);
   }
 // #endregion
 }

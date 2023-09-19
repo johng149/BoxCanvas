@@ -12,4 +12,4 @@ import 'package:box_canvas/box_canvas.dart';
 typedef CustomEntityIdCallback<T> = Future<String?> Function(
     {required String proposedId,
     required EntityPosition position,
-    required AddEntityResponse<T> info});
+    required T info});

@@ -20,11 +20,9 @@ packages:
   box_canvas:
     dependency: "direct main"
     description:
-      path: "."
-      ref: master
-      resolved-ref: b84f0d1082059622ea23ed594f2bc7461aa26b28
-      url: "https://github.com/johng149/BoxCanvas.git"
-    source: git
+      path: ".."
+      relative: true
+    source: path
     version: "0.0.1"
   characters:
     dependency: transitive

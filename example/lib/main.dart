@@ -37,14 +37,13 @@ class MyApp extends StatelessWidget {
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  AddEntityResponse<String> _addEntityFunction(
+  Widget _addEntityFunction(
       {required BuildContext context, required String id}) {
     final widget = ListView(
       key: GlobalKey(),
       children: [for (int i = 0; i < 32; i++) Text("a" * i)],
     );
-    final info = "entity info of id: $id";
-    return AddEntityResponse<String>(info: info, widget: widget);
+    return widget;
   }
 
   String _labelMaker(BuildContext context) {
@@ -75,7 +74,7 @@ class HomePage extends StatelessWidget {
   Future<String> _customIdCallback(
       {required String proposedId,
       required EntityPosition position,
-      required AddEntityResponse<String> info}) {
+      required String info}) {
     return Future.value("$proposedId NICE!");
   }
 
@@ -85,6 +84,7 @@ class HomePage extends StatelessWidget {
       AddEntityOption<String>(
           addEntityFunction: _addEntityFunction,
           addEntityLabelMaker: _labelMaker,
+          addEntityPrimer: () => "entity info",
           icon: Icon(Icons.list))
     ];
     return Scaffold(
