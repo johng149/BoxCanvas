@@ -23,6 +23,7 @@ mixin _$EntityPosition {
   XYTuple get position => throw _privateConstructorUsedError;
   XYTuple get size => throw _privateConstructorUsedError;
   bool get relative => throw _privateConstructorUsedError;
+  DateTime? get lastUpdated => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,7 +37,8 @@ abstract class $EntityPositionCopyWith<$Res> {
           EntityPosition value, $Res Function(EntityPosition) then) =
       _$EntityPositionCopyWithImpl<$Res, EntityPosition>;
   @useResult
-  $Res call({XYTuple position, XYTuple size, bool relative});
+  $Res call(
+      {XYTuple position, XYTuple size, bool relative, DateTime? lastUpdated});
 
   $XYTupleCopyWith<$Res> get position;
   $XYTupleCopyWith<$Res> get size;
@@ -58,6 +60,7 @@ class _$EntityPositionCopyWithImpl<$Res, $Val extends EntityPosition>
     Object? position = null,
     Object? size = null,
     Object? relative = null,
+    Object? lastUpdated = freezed,
   }) {
     return _then(_value.copyWith(
       position: null == position
@@ -72,6 +75,10 @@ class _$EntityPositionCopyWithImpl<$Res, $Val extends EntityPosition>
           ? _value.relative
           : relative // ignore: cast_nullable_to_non_nullable
               as bool,
+      lastUpdated: freezed == lastUpdated
+          ? _value.lastUpdated
+          : lastUpdated // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ) as $Val);
   }
 
@@ -93,14 +100,15 @@ class _$EntityPositionCopyWithImpl<$Res, $Val extends EntityPosition>
 }
 
 /// @nodoc
-abstract class _$$_EntityPositionCopyWith<$Res>
+abstract class _$$EntityPositionImplCopyWith<$Res>
     implements $EntityPositionCopyWith<$Res> {
-  factory _$$_EntityPositionCopyWith(
-          _$_EntityPosition value, $Res Function(_$_EntityPosition) then) =
-      __$$_EntityPositionCopyWithImpl<$Res>;
+  factory _$$EntityPositionImplCopyWith(_$EntityPositionImpl value,
+          $Res Function(_$EntityPositionImpl) then) =
+      __$$EntityPositionImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({XYTuple position, XYTuple size, bool relative});
+  $Res call(
+      {XYTuple position, XYTuple size, bool relative, DateTime? lastUpdated});
 
   @override
   $XYTupleCopyWith<$Res> get position;
@@ -109,11 +117,11 @@ abstract class _$$_EntityPositionCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_EntityPositionCopyWithImpl<$Res>
-    extends _$EntityPositionCopyWithImpl<$Res, _$_EntityPosition>
-    implements _$$_EntityPositionCopyWith<$Res> {
-  __$$_EntityPositionCopyWithImpl(
-      _$_EntityPosition _value, $Res Function(_$_EntityPosition) _then)
+class __$$EntityPositionImplCopyWithImpl<$Res>
+    extends _$EntityPositionCopyWithImpl<$Res, _$EntityPositionImpl>
+    implements _$$EntityPositionImplCopyWith<$Res> {
+  __$$EntityPositionImplCopyWithImpl(
+      _$EntityPositionImpl _value, $Res Function(_$EntityPositionImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -122,8 +130,9 @@ class __$$_EntityPositionCopyWithImpl<$Res>
     Object? position = null,
     Object? size = null,
     Object? relative = null,
+    Object? lastUpdated = freezed,
   }) {
-    return _then(_$_EntityPosition(
+    return _then(_$EntityPositionImpl(
       position: null == position
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
@@ -136,19 +145,26 @@ class __$$_EntityPositionCopyWithImpl<$Res>
           ? _value.relative
           : relative // ignore: cast_nullable_to_non_nullable
               as bool,
+      lastUpdated: freezed == lastUpdated
+          ? _value.lastUpdated
+          : lastUpdated // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$_EntityPosition extends _EntityPosition {
-  _$_EntityPosition(
-      {required this.position, required this.size, required this.relative})
+class _$EntityPositionImpl extends _EntityPosition {
+  _$EntityPositionImpl(
+      {required this.position,
+      required this.size,
+      required this.relative,
+      this.lastUpdated})
       : super._();
 
-  factory _$_EntityPosition.fromJson(Map<String, dynamic> json) =>
-      _$$_EntityPositionFromJson(json);
+  factory _$EntityPositionImpl.fromJson(Map<String, dynamic> json) =>
+      _$$EntityPositionImplFromJson(json);
 
   @override
   final XYTuple position;
@@ -156,37 +172,43 @@ class _$_EntityPosition extends _EntityPosition {
   final XYTuple size;
   @override
   final bool relative;
+  @override
+  final DateTime? lastUpdated;
 
   @override
   String toString() {
-    return 'EntityPosition(position: $position, size: $size, relative: $relative)';
+    return 'EntityPosition(position: $position, size: $size, relative: $relative, lastUpdated: $lastUpdated)';
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_EntityPosition &&
+            other is _$EntityPositionImpl &&
             (identical(other.position, position) ||
                 other.position == position) &&
             (identical(other.size, size) || other.size == size) &&
             (identical(other.relative, relative) ||
-                other.relative == relative));
+                other.relative == relative) &&
+            (identical(other.lastUpdated, lastUpdated) ||
+                other.lastUpdated == lastUpdated));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, position, size, relative);
+  int get hashCode =>
+      Object.hash(runtimeType, position, size, relative, lastUpdated);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_EntityPositionCopyWith<_$_EntityPosition> get copyWith =>
-      __$$_EntityPositionCopyWithImpl<_$_EntityPosition>(this, _$identity);
+  _$$EntityPositionImplCopyWith<_$EntityPositionImpl> get copyWith =>
+      __$$EntityPositionImplCopyWithImpl<_$EntityPositionImpl>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_EntityPositionToJson(
+    return _$$EntityPositionImplToJson(
       this,
     );
   }
@@ -196,11 +218,12 @@ abstract class _EntityPosition extends EntityPosition {
   factory _EntityPosition(
       {required final XYTuple position,
       required final XYTuple size,
-      required final bool relative}) = _$_EntityPosition;
+      required final bool relative,
+      final DateTime? lastUpdated}) = _$EntityPositionImpl;
   _EntityPosition._() : super._();
 
   factory _EntityPosition.fromJson(Map<String, dynamic> json) =
-      _$_EntityPosition.fromJson;
+      _$EntityPositionImpl.fromJson;
 
   @override
   XYTuple get position;
@@ -209,7 +232,9 @@ abstract class _EntityPosition extends EntityPosition {
   @override
   bool get relative;
   @override
+  DateTime? get lastUpdated;
+  @override
   @JsonKey(ignore: true)
-  _$$_EntityPositionCopyWith<_$_EntityPosition> get copyWith =>
+  _$$EntityPositionImplCopyWith<_$EntityPositionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

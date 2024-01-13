@@ -11,7 +11,9 @@ class EntityPosition with _$EntityPosition {
   factory EntityPosition(
       {required XYTuple position,
       required XYTuple size,
-      required bool relative}) = _EntityPosition;
+      required bool relative,
+      DateTime? lastUpdated // please use UTC time
+      }) = _EntityPosition;
 
   factory EntityPosition.fromJson(Map<String, dynamic> json) =>
       _$EntityPositionFromJson(json);
@@ -43,6 +45,25 @@ class EntityPosition with _$EntityPosition {
       final position = this.position.toRelative(constraints);
       final size = this.size.toRelative(constraints);
       return copyWith(position: position, size: size, relative: true);
+    }
+  }
+
+  ///Compares [lastUpdated] field with [other.lastUpdated] field
+  ///
+  ///If both are null, they are equal,
+  ///if one is null and the other is not, the one that is null is considered
+  ///older.
+  ///If both are not null, the one with the more recent [DateTime] is considered
+  ///newer
+  int compareTo(EntityPosition other) {
+    if (lastUpdated == null && other.lastUpdated == null) {
+      return 0;
+    } else if (lastUpdated == null) {
+      return -1;
+    } else if (other.lastUpdated == null) {
+      return 1;
+    } else {
+      return lastUpdated!.compareTo(other.lastUpdated!);
     }
   }
 }

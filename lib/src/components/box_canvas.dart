@@ -118,7 +118,7 @@ class BoxCanvas<T> extends ConsumerWidget {
     final positionsNotifier = ref.watch(entityPositions);
     final bodiesNotifier = ref.watch(entityBodies);
     final offset = ref.watch(globalOffset);
-    for (final id in positionsNotifier.ids) {
+    for (final id in positionsNotifier.sortedIds()) {
       final pos = positionsNotifier.accessOpt(id);
       final body = bodiesNotifier.accessOpt(id);
       if (_entityVisible(pos: pos, body: body, offset: offset)) {

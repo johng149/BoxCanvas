@@ -13,6 +13,10 @@ class EntityPositionNotifier extends ChangeNotifier {
 
   Iterable<String> get ids => data.keys;
 
+  Iterable<String> sortedIds() {
+    return data.keys.toList()..sort((a, b) => data[a]!.compareTo(data[b]!));
+  }
+
   ///Attempt to read position referred to by [id]
   EntityPosition? accessOpt(String id) {
     return data[id];
@@ -43,38 +47,6 @@ class EntityPositionNotifier extends ChangeNotifier {
       notifyListeners();
     }
     return removed;
-  }
-
-  ///Removes data referrred to by [id] and then [upsert] said data with [id]
-  ///
-  ///If no such data exists, nothing happens.
-  ///
-  ///The intended use has the assumption that data is being stored as a
-  ///[LinkedHashMap] and the purpose of the data is for defining a stack.
-  ///By removing and then reinserting the data, the widget that uses the
-  ///data should now occur at the top of stack (in other words, last in the
-  ///list of widgets in the stack)
-  void refresh(String id) {
-    final removed = remove(id, false);
-    if (removed != null) {
-      upsert(id, removed);
-    }
-  }
-
-  ///Removes data referred to by [id] and then [upsert] given [data] with [id]
-  ///
-  ///If data referred to by [id] not exist, nothing happens.
-  ///
-  ///The intended use has the assumption that data is being stored as a
-  ///[LinkedHashMap] and the purpose of the data is for defining a stack.
-  ///By removing and then reinserting the data, the widget that uses the
-  ///data should now occur at the top of stack (in other words, last in the
-  ///list of widgets in the stack)
-  void refreshWithData(String id, EntityPosition data) {
-    final removed = remove(id, false);
-    if (removed != null) {
-      upsert(id, data);
-    }
   }
 
   ///Sets position data to given [data] and notifies listeners

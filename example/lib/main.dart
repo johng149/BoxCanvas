@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:box_canvas/box_canvas.dart';
 import 'package:example/providers/entity_body_provider.dart';
 import 'package:example/providers/entity_position_provider.dart';
@@ -39,9 +41,15 @@ class HomePage extends StatelessWidget {
 
   Widget _addEntityFunction(
       {required BuildContext context, required String id}) {
+    const lowerBound = 2;
+    const upperBound = 24;
+    final selected = Random().nextInt(upperBound - lowerBound) + lowerBound;
     final widget = ListView(
       key: GlobalKey(),
-      children: [for (int i = 0; i < 32; i++) Text("a" * i)],
+      children: [
+        for (int i = 0; i < selected; i++) Text("a" * i),
+        Text(selected.toString())
+      ],
     );
     return widget;
   }
@@ -69,6 +77,11 @@ class HomePage extends StatelessWidget {
   void _resizeCallback({required String id, required EntityPosition position}) {
     // for debugging, will just print the position and id
     print("position: $position, id: $id");
+
+    // also try turning position into json and then back to see if it works
+    final json = position.toJson();
+    final position2 = EntityPosition.fromJson(json);
+    print("position2: $position2");
   }
 
   Future<String> _customIdCallback(

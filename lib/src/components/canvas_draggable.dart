@@ -101,10 +101,13 @@ class _CanvasDraggableState extends State<CanvasDraggable> {
   ///set [newPosition] to not null value
   ///
   ///Used both by resize and pan detectors
-  void _bringSelfToFront(
+  EntityPosition _bringSelfToFront(
       {required WidgetRef ref, EntityPosition? newPosition}) {
     final position = newPosition ?? widget.position;
-    ref.read(widget.entityPositions).refreshWithData(widget.id, position);
+    final utcNow = DateTime.now().toUtc();
+    final newPos = position.copyWith(lastUpdated: utcNow);
+    ref.read(widget.entityPositions).upsert(widget.id, newPos);
+    return newPos;
   }
 
   // #region pan detection
@@ -130,9 +133,10 @@ class _CanvasDraggableState extends State<CanvasDraggable> {
     double currentY = absPos.y + yOffset;
     XYTuple relativePos = XYTuple(x: currentX, y: currentY, relative: false)
         .toRelative(widget.constraints);
-    final newEntityPos = widget.position.copyWith(position: relativePos);
+    EntityPosition newEntityPos =
+        widget.position.copyWith(position: relativePos);
 
-    _bringSelfToFront(ref: ref, newPosition: newEntityPos);
+    newEntityPos = _bringSelfToFront(ref: ref, newPosition: newEntityPos);
 
     widget.onDragEnd?.call(id: widget.id, position: newEntityPos);
     setState(() {
@@ -192,7 +196,7 @@ class _CanvasDraggableState extends State<CanvasDraggable> {
         .ensureGr()
         .toRelative(widget.constraints);
     EntityPosition newPos = widget.position.copyWith(size: relEntitySize);
-    _bringSelfToFront(ref: ref, newPosition: newPos);
+    newPos = _bringSelfToFront(ref: ref, newPosition: newPos);
     widget.onResizeEnd?.call(id: widget.id, position: newPos);
     setState(() {
       xSizeOffset = 0;
