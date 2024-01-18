@@ -1,4 +1,5 @@
 import 'package:box_canvas/box_canvas.dart';
+import 'package:box_canvas/src/models/custom_entity_id_callback/custom_entity_id_callback.dart';
 
 /// Given an [entityPosition] and [response] return an id
 ///
@@ -9,7 +10,8 @@ import 'package:box_canvas/box_canvas.dart';
 /// backend services to generate the id
 ///
 /// if the resulting id is null, the entity will not be added
-typedef CustomEntityIdCallback<T> = Future<String?> Function(
-    {required String proposedId,
-    required EntityPosition position,
-    required T info});
+typedef CustomEntityIdCallback<T, D>
+    = Future<CustomEntityIdCallbackResult<D>?> Function(
+        {required String proposedId,
+        required EntityPosition position,
+        required T info});

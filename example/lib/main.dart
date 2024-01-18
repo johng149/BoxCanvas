@@ -40,13 +40,14 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   Widget _addEntityFunction(
-      {required BuildContext context, required String id}) {
+      {required BuildContext context, required String id, String? data}) {
     const lowerBound = 2;
     const upperBound = 24;
     final selected = Random().nextInt(upperBound - lowerBound) + lowerBound;
     final widget = ListView(
       key: GlobalKey(),
       children: [
+        Text(data ?? "no data"),
         for (int i = 0; i < selected; i++) Text("a" * i),
         Text(selected.toString())
       ],
@@ -84,17 +85,19 @@ class HomePage extends StatelessWidget {
     print("position2: $position2");
   }
 
-  Future<String> _customIdCallback(
+  Future<CustomEntityIdCallbackResult<String>> _customIdCallback(
       {required String proposedId,
       required EntityPosition position,
       required String info}) {
-    return Future.value("$proposedId NICE!");
+    final CustomEntityIdCallbackResult<String> result =
+        CustomEntityIdCallbackResult(id: "$proposedId NICE!", data: "testing");
+    return Future.value(result);
   }
 
   @override
   Widget build(BuildContext context) {
-    List<AddEntityOption<String>> options = [
-      AddEntityOption<String>(
+    List<AddEntityOption<String, String>> options = [
+      AddEntityOption<String, String>(
           addEntityFunction: _addEntityFunction,
           addEntityLabelMaker: _labelMaker,
           addEntityPrimer: () => "entity info",
@@ -102,7 +105,7 @@ class HomePage extends StatelessWidget {
     ];
     return Scaffold(
         appBar: AppBar(title: const Text("Test AppBar")),
-        body: BoxCanvas<String>(
+        body: BoxCanvas<String, String>(
             globalOffset: globalOffsetProvider,
             entityPositions: entityPositionProvider,
             entityBodies: entityBodyProvider,

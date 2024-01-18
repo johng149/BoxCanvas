@@ -1,8 +1,8 @@
 import 'package:box_canvas/src/definitions/add_entity_option_typedefs.dart';
 import 'package:flutter/material.dart';
 
-class AddEntityOption<T> {
-  AddEntityFunction addEntityFunction;
+class AddEntityOption<T, D> {
+  AddEntityFunction<D> addEntityFunction;
   AddEntityPrimer<T> addEntityPrimer;
   AddEntityLabelMaker addEntityLabelMaker;
   Icon icon;

@@ -9,6 +9,8 @@ export 'src/providers/add_entity_option.dart' show AddEntityOption;
 //and supporting models
 export 'src/models/xy_tuple/xy_tuple.dart' show XYTuple;
 export 'src/models/entity_position/entity_position.dart' show EntityPosition;
+export 'src/models/custom_entity_id_callback/custom_entity_id_callback.dart'
+    show CustomEntityIdCallbackResult;
 export 'src/providers/entity_body_notifier.dart' show EntityBodyNotifier;
 export 'src/providers/entity_position_provider.dart'
     show EntityPositionNotifier;

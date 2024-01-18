@@ -17,7 +17,7 @@ import 'package:uuid/uuid.dart';
 ///Displays widgets on screen based on data regarding them in given providers
 ///
 ///Also, creates [SpeedDial] for adding new widgets based on given [options]
-class BoxCanvas<T> extends ConsumerWidget {
+class BoxCanvas<T, D> extends ConsumerWidget {
   ///When user pans canvas instead of an individual widget, offset stored here
   ///
   ///This is called offset since all widgets will have their positions modified
@@ -39,7 +39,7 @@ class BoxCanvas<T> extends ConsumerWidget {
   final ChangeNotifierProvider<EntityBodyNotifier> entityBodies;
 
   ///Options to be shown when user clicks button to add widget to canvas
-  final List<AddEntityOption<T>> options;
+  final List<AddEntityOption<T, D>> options;
 
   ///Callback for when entity is added to canvas
   final AddEntityCallback<T>? addEntityCallback;
@@ -51,7 +51,7 @@ class BoxCanvas<T> extends ConsumerWidget {
   final EntityResizeCallback? onResizeEnd;
 
   ///Callback to change how id is assigned to new entities
-  final CustomEntityIdCallback<T>? customEntityIdCallback;
+  final CustomEntityIdCallback<T, D>? customEntityIdCallback;
 
   ///Used when creating widgets to given them unique identifier
   final _uid = const Uuid();
@@ -279,7 +279,7 @@ class BoxCanvas<T> extends ConsumerWidget {
   void _addEntityToProviders(
       {required BuildContext context,
       required WidgetRef ref,
-      required AddEntityOption<T> option}) {
+      required AddEntityOption<T, D> option}) {
     //we want entity to always be added on the upper left hand corner, so
     //we need to know where the user has global panned so far to ensure
     //position is correct
@@ -307,10 +307,11 @@ class BoxCanvas<T> extends ConsumerWidget {
           .call(proposedId: canidateId, position: entityPosition, info: info)
           .then((value) {
         if (value != null) {
-          final entity = option.addEntityFunction(context: context, id: value);
+          final entity = option.addEntityFunction(
+              context: context, id: value.id, data: value.data);
           _addEntityToProvidersHelper(
               ref: ref,
-              id: value,
+              id: value.id,
               response: entity,
               position: entityPosition,
               info: info);
